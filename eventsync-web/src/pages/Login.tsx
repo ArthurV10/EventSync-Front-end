@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogIn } from 'lucide-react';
+import api from '../services/api';
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -13,13 +14,12 @@ const Login: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            // Mock login for now
-            if (email && password) {
-                login('mock-jwt-token', { id: '1', name: 'Usuário Teste', email });
-                navigate('/');
-            }
+            const response = await api.post('/auth/login', { email, password });
+            login(response.data.token, response.data.user);
+            navigate('/');
         } catch (err) {
-            setError('Credenciais inválidas');
+            console.error(err);
+            setError('Credenciais inválidas ou erro no servidor');
         }
     };
 

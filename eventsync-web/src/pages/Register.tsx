@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
-// import api from '../services/api';
+import api from '../services/api';
 
 const Register: React.FC = () => {
     const [name, setName] = useState('');
@@ -12,10 +12,11 @@ const Register: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            // await api.post('/auth/register', { name, email, password });
+            await api.post('/auth/register', { name, email, password, role: 'PARTICIPANT' });
             navigate('/login');
         } catch (err) {
             console.error(err);
+            alert('Erro ao criar conta. Verifique os dados e tente novamente.');
         }
     };
 

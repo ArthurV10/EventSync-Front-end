@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import Navbar from '../components/Navbar';
-// import api from '../services/api';
+import api from '../services/api';
 
 const CreateEvent: React.FC = () => {
     const navigate = useNavigate();
@@ -20,11 +20,12 @@ const CreateEvent: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            // await api.post('/events', formData);
+            await api.post('/events', formData);
             console.log('Evento Criado:', formData);
             navigate('/');
         } catch (error) {
             console.error('Erro ao criar evento:', error);
+            alert('Erro ao criar evento. Tente novamente.');
         }
     };
 

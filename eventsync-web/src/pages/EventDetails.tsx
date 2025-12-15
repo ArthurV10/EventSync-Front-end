@@ -1,20 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Calendar, MapPin, User, ArrowLeft } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import api from '../services/api';
+import type { Event } from '../types';
 
 const EventDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+    const [event, setEvent] = useState<Event | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    // Mock de evento
-    const event = {
-        id,
-        title: 'Tech Conference 2025',
-        description: 'Esta é uma descrição detalhada da Tech Conference 2025. O evento cobrirá diversos tópicos incluindo IA, Desenvolvimento Web e Computação em Nuvem. Junte-se a nós para uma experiência incrível com líderes da indústria.',
-        date: '2025-06-15',
-        location: 'São Francisco, CA',
-        organizer: 'TechWorld'
-    };
+    useEffect(() => {
+        const fetchEvent = async () => {
+            try {
+                const response = await api.get(`/events/${id}`);
+                setEvent(response.data);
+            } catch (error) {
+                console.error('Erro ao buscar detalhes do evento:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (id) {
+            fetchEvent();
+        }
+    }, [id]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        );
+    }
+
+    if (!event) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
+                <h2 className="text-2xl font-bold text-gray-900">Evento não encontrado</h2>
+                <Link to="/" className="mt-4 text-blue-600 hover:text-blue-500">Voltar para o Início</Link>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -30,7 +58,7 @@ const EventDetails: React.FC = () => {
                             <div className="mt-4 flex flex-col sm:flex-row sm:space-x-6 text-gray-600">
                                 <div className="flex items-center mt-2 sm:mt-0">
                                     <Calendar className="w-5 h-5 mr-2 text-blue-500" />
-                                    <span>{event.date}</span>
+                                    <span>{new Date(event.date).toLocaleDateString()}</span>
                                 </div>
                                 <div className="flex items-center mt-2 sm:mt-0">
                                     <MapPin className="w-5 h-5 mr-2 text-red-500" />
