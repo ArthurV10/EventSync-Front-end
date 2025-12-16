@@ -6,6 +6,7 @@ interface AuthContextType {
     token: string | null;
     login: (token: string, user: User) => void;
     logout: () => void;
+    updateUser: (user: User) => void;
     isAuthenticated: boolean;
     loading: boolean;
 }
@@ -41,11 +42,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.removeItem('@EventSync:user');
     };
 
+    const updateUser = (updatedUser: User) => {
+        setUser(updatedUser);
+        localStorage.setItem('@EventSync:user', JSON.stringify(updatedUser));
+    };
+
     const value = {
         user,
         token,
         login,
         logout,
+        updateUser,
         isAuthenticated: !!token,
         loading
     };

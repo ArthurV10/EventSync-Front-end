@@ -11,7 +11,7 @@ export interface User {
     role: Role;
     city?: string;
     photo_url?: string;
-    visibility_participation?: boolean; // New field from schema
+    visibility_participation?: boolean;
 }
 
 export interface Event {
@@ -29,7 +29,9 @@ export interface Event {
     max_inscriptions?: number;
     banner_url?: string;
     organizer?: User;
-    registrations?: Registration[]; // For social features
+    registrations?: Registration[];
+    isRegistered?: boolean;
+    registrationStatus?: RegistrationStatus;
 }
 
 export interface Registration {

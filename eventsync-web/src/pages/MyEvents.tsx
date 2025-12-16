@@ -6,16 +6,20 @@ import { Calendar, MapPin, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import type { Event } from '../types';
 
-const Dashboard: React.FC = () => {
+const MyEvents: React.FC = () => {
     const { user } = useAuth();
     const [events, setEvents] = useState<Event[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchEvents = async () => {
+        const fetchMyEvents = async () => {
             try {
+                // Fetch all events and filter client-side
+                // Ideally backend should support /events/me or similar
                 const response = await api.get('/events');
-                setEvents(response.data);
+                const allEvents = response.data as Event[];
+                const myEvents = allEvents.filter(event => event.organizer_id === user?.id);
+                setEvents(myEvents);
             } catch (error) {
                 console.error('Erro ao buscar eventos', error);
             } finally {
@@ -23,8 +27,10 @@ const Dashboard: React.FC = () => {
             }
         };
 
-        fetchEvents();
-    }, []);
+        if (user) {
+            fetchMyEvents();
+        }
+    }, [user]);
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('pt-BR', {
@@ -35,6 +41,15 @@ const Dashboard: React.FC = () => {
         });
     };
 
+    if (!user || user.role !== 'ORGANIZER') {
+        return (
+            <div className="min-h-screen bg-rich-black text-gray-100 flex items-center justify-center">
+                <Navbar />
+                <p>Acesso restrito a organizadores.</p>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-rich-black text-gray-100">
             <Navbar />
@@ -42,14 +57,12 @@ const Dashboard: React.FC = () => {
             <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 border-b border-rich-border pb-6">
                     <div>
-                        <h2 className="text-2xl sm:text-3xl font-bold text-gold-400 uppercase tracking-wide">Eventos Disponíveis</h2>
-                        <p className="mt-1 text-sm text-gray-400">Descubra experiências exclusivas.</p>
+                        <h2 className="text-2xl sm:text-3xl font-bold text-gold-400 uppercase tracking-wide">Meus Eventos</h2>
+                        <p className="mt-1 text-sm text-gray-400">Gerencie seus eventos criados.</p>
                     </div>
-                    {user?.role === 'ORGANIZER' && (
-                        <Link to="/create-event" className="hidden sm:inline-flex items-center px-6 py-2 bg-gold-400 text-black font-bold rounded-full hover:bg-gold-500 shadow-glow transition-all hover:scale-105 active:scale-95 uppercase text-xs tracking-wider">
-                            Criar Evento
-                        </Link>
-                    )}
+                    <Link to="/create-event" className="hidden sm:inline-flex items-center px-6 py-2 bg-gold-400 text-black font-bold rounded-full hover:bg-gold-500 shadow-glow transition-all hover:scale-105 active:scale-95 uppercase text-xs tracking-wider">
+                        Criar Novo Evento
+                    </Link>
                 </div>
 
                 {loading ? (
@@ -58,12 +71,10 @@ const Dashboard: React.FC = () => {
                     </div>
                 ) : events.length === 0 ? (
                     <div className="text-center py-20 bg-rich-gray rounded-xl border border-rich-border">
-                        <p className="text-gray-500 text-lg mb-4">Nenhum evento encontrado no momento.</p>
-                        {user?.role === 'ORGANIZER' && (
-                            <Link to="/create-event" className="inline-block text-gold-400 font-bold hover:underline uppercase tracking-wide text-sm">
-                                Seja o primeiro a criar &gt;
-                            </Link>
-                        )}
+                        <p className="text-gray-500 text-lg mb-4">Você ainda não criou nenhum evento.</p>
+                        <Link to="/create-event" className="inline-block text-gold-400 font-bold hover:underline uppercase tracking-wide text-sm">
+                            Começar agora &gt;
+                        </Link>
                     </div>
                 ) : (
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -93,18 +104,13 @@ const Dashboard: React.FC = () => {
                                         <span className="truncate">{event.location_address || 'Local a definir'}</span>
                                     </div>
 
-                                    <div className="pt-4 border-t border-rich-border flex justify-between items-center">
-                                        <span className="text-xs text-gray-500 uppercase">{event.organizer?.name || 'Organizador'}</span>
-                                        <div className="flex gap-3">
-                                            {user?.role === 'ORGANIZER' && user.id === event.organizer_id && (
-                                                <Link to={`/events/${event.id}/edit`} className="text-xs font-bold text-gray-400 hover:text-white hover:underline uppercase tracking-wider flex items-center">
-                                                    Editar
-                                                </Link>
-                                            )}
-                                            <Link to={`/events/${event.id}`} className="text-xs font-bold text-gold-400 hover:underline uppercase tracking-wider flex items-center">
-                                                Detalhes <ArrowRight className="w-3 h-3 ml-1" />
-                                            </Link>
-                                        </div>
+                                    <div className="pt-4 border-t border-rich-border flex justify-between items-center bg-black/20 -mx-6 -mb-6 px-6 py-4 mt-auto">
+                                        <Link to={`/events/${event.id}/edit`} className="text-xs font-bold text-gray-400 hover:text-white uppercase tracking-wider flex items-center">
+                                            Editar
+                                        </Link>
+                                        <Link to={`/events/${event.id}`} className="text-xs font-bold text-gold-400 hover:underline uppercase tracking-wider flex items-center">
+                                            Gerenciar <ArrowRight className="w-3 h-3 ml-1" />
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -116,4 +122,4 @@ const Dashboard: React.FC = () => {
     );
 };
 
-export default Dashboard;
+export default MyEvents;
