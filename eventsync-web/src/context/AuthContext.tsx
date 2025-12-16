@@ -16,8 +16,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        const storedUser = localStorage.getItem('user');
+        const storedToken = localStorage.getItem('@EventSync:token');
+        const storedUser = localStorage.getItem('@EventSync:user');
         if (storedToken && storedUser) {
             setToken(storedToken);
             setUser(JSON.parse(storedUser));
@@ -27,15 +27,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const login = (newToken: string, newUser: User) => {
         setToken(newToken);
         setUser(newUser);
-        localStorage.setItem('token', newToken);
-        localStorage.setItem('user', JSON.stringify(newUser));
+        localStorage.setItem('@EventSync:token', newToken);
+        localStorage.setItem('@EventSync:user', JSON.stringify(newUser));
     };
 
     const logout = () => {
         setToken(null);
         setUser(null);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        localStorage.removeItem('@EventSync:token');
+        localStorage.removeItem('@EventSync:user');
     };
 
     const value = {
