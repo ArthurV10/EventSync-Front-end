@@ -1,1 +1,14 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    color-scheme: dark;
+}
+
+body {
+    background-color: #000000;
+    /* Garante fundo preto */
+    color: #ffffff;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}

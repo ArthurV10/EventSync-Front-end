@@ -7,7 +7,6 @@ import type { EventType } from '../types';
 
 const CreateEvent: React.FC = () => {
     const navigate = useNavigate();
-    // State matching IRequest in backend CreateEventUseCase
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -31,7 +30,6 @@ const CreateEvent: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            // Prepare payload
             const payload = {
                 title: formData.title,
                 description: formData.description,
@@ -49,34 +47,33 @@ const CreateEvent: React.FC = () => {
             navigate('/');
         } catch (error: any) {
             console.error('Erro ao criar evento:', error);
-            if (error.response?.data?.issues) {
-                const messages = error.response.data.issues.map((issue: any) => `${issue.path.join('.')}: ${issue.message}`).join('\n');
-                alert(`Erro de validação:\n${messages}`);
-            } else {
-                alert('Erro ao criar evento. Verifique os dados.');
-            }
+            alert('Erro ao criar evento. Verifique os dados.');
         }
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-black text-white">
             <Navbar />
-            <div className="py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
+            <div className="py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-3xl mx-auto">
-                    <Link to="/" className="flex items-center text-blue-600 hover:text-blue-500 mb-6 transition-colors">
-                        <ArrowLeft className="w-5 h-5 mr-2" /> Cancelar
+                    <Link to="/" className="flex items-center text-gray-400 hover:text-[#D4AF37] mb-8 transition-colors text-sm uppercase tracking-wide font-medium">
+                        <ArrowLeft className="w-4 h-4 mr-2" /> Cancelar
                     </Link>
-                    <div className="bg-white shadow rounded-lg p-6 sm:p-8">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Criar Novo Evento</h2>
+                    <div className="bg-[#121212] border border-[#2A2A2A] shadow-2xl rounded-xl p-8">
+                        <h2 className="text-2xl font-bold text-[#D4AF37] mb-8 uppercase tracking-widest text-center border-b border-[#2A2A2A] pb-4">
+                            Novo Evento
+                        </h2>
+
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Title */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Título do Evento</label>
+                                <label className="block text-xs font-bold text-[#D4AF37] uppercase tracking-wider mb-2">Título do Evento</label>
                                 <input
                                     type="text"
                                     name="title"
                                     required
-                                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-3 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                    className="block w-full bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg text-white px-4 py-3 focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors placeholder-gray-600"
+                                    placeholder="Ex: Gala Night 2024"
                                     value={formData.title}
                                     onChange={handleChange}
                                 />
@@ -84,12 +81,13 @@ const CreateEvent: React.FC = () => {
 
                             {/* Description */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Descrição</label>
+                                <label className="block text-xs font-bold text-[#D4AF37] uppercase tracking-wider mb-2">Descrição</label>
                                 <textarea
                                     name="description"
                                     rows={4}
                                     required
-                                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-3 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                    className="block w-full bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg text-white px-4 py-3 focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors placeholder-gray-600"
+                                    placeholder="Detalhes exclusivos do evento..."
                                     value={formData.description}
                                     onChange={handleChange}
                                 />
@@ -98,23 +96,23 @@ const CreateEvent: React.FC = () => {
                             {/* Dates */}
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Data de Início</label>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Data Início</label>
                                     <input
                                         type="datetime-local"
                                         name="start_date"
                                         required
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-3 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                        className="block w-full bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg text-gray-300 px-4 py-3 focus:outline-none focus:border-[#D4AF37] transition-colors"
                                         value={formData.start_date}
                                         onChange={handleChange}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Data de Término</label>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Data Fim</label>
                                     <input
                                         type="datetime-local"
                                         name="end_date"
                                         required
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-3 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                        className="block w-full bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg text-gray-300 px-4 py-3 focus:outline-none focus:border-[#D4AF37] transition-colors"
                                         value={formData.end_date}
                                         onChange={handleChange}
                                     />
@@ -124,75 +122,75 @@ const CreateEvent: React.FC = () => {
                             {/* Locations */}
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Endereço Presencial (Opcional)</label>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Local (Presencial)</label>
                                     <input
                                         type="text"
                                         name="location_address"
-                                        placeholder="Rua Exemplo, 123"
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-3 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Endereço Completo"
+                                        className="block w-full bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg text-white px-4 py-3 focus:outline-none focus:border-[#D4AF37] transition-colors"
                                         value={formData.location_address}
                                         onChange={handleChange}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Link Online (Opcional)</label>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Link (Online)</label>
                                     <input
                                         type="url"
                                         name="location_url"
-                                        placeholder="https://meet.google.com/..."
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-3 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="URL da reunião"
+                                        className="block w-full bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg text-white px-4 py-3 focus:outline-none focus:border-[#D4AF37] transition-colors"
                                         value={formData.location_url}
                                         onChange={handleChange}
                                     />
                                 </div>
                             </div>
 
-                            {/* Price and Type */}
+                            {/* Price / Type / Max */}
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Tipo</label>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Tipo</label>
                                     <select
                                         name="type"
                                         value={formData.type}
                                         onChange={handleChange}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-3 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                        className="block w-full bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg text-white px-4 py-3 focus:outline-none focus:border-[#D4AF37] transition-colors"
                                     >
                                         <option value="FREE">Gratuito</option>
                                         <option value="PAID">Pago</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Preço (R$)</label>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Preço (R$)</label>
                                     <input
                                         type="number"
                                         name="price"
                                         min="0"
                                         step="0.01"
                                         disabled={formData.type === 'FREE'}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-3 px-3 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
+                                        className="block w-full bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg text-white px-4 py-3 focus:outline-none focus:border-[#D4AF37] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                         value={formData.type === 'FREE' ? 0 : formData.price}
                                         onChange={handleChange}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Vagas Máximas</label>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Vagas</label>
                                     <input
                                         type="number"
                                         name="max_inscriptions"
                                         min="1"
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-3 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                        className="block w-full bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg text-white px-4 py-3 focus:outline-none focus:border-[#D4AF37] transition-colors"
                                         value={formData.max_inscriptions}
                                         onChange={handleChange}
                                     />
                                 </div>
                             </div>
 
-                            <div className="pt-4">
+                            <div className="pt-6">
                                 <button
                                     type="submit"
-                                    className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                    className="w-full flex justify-center py-4 px-4 border border-transparent rounded-lg shadow-lg text-sm font-bold text-black bg-[#D4AF37] hover:bg-[#B5952F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#121212] focus:ring-[#D4AF37] uppercase tracking-widest transition-all hover:scale-[1.02]"
                                 >
-                                    Criar Evento
+                                    Publicar Evento
                                 </button>
                             </div>
                         </form>

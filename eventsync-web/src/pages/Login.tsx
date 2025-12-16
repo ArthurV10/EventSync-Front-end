@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // Rebuild Trigger
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogIn } from 'lucide-react';
@@ -24,47 +24,56 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8">
-            <div className="w-full max-w-sm sm:max-w-md p-6 sm:p-8 space-y-8 bg-white rounded-xl shadow-lg">
+        <div className="flex items-center justify-center min-h-screen bg-black px-4 sm:px-6 lg:px-8">
+            <div className="w-full max-w-sm sm:max-w-md p-6 sm:p-8 space-y-8 bg-[#121212] rounded-xl border border-[#2A2A2A] shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#D4AF37] to-[#8C7323]"></div>
+
                 <div className="text-center">
-                    <div className="flex justify-center mx-auto bg-blue-100 p-3 rounded-full w-fit">
-                        <LogIn className="w-8 h-8 text-blue-600" />
+                    <div className="flex justify-center mx-auto bg-[#D4AF37]/10 p-4 rounded-full w-fit mb-4 border border-[#D4AF37]/20">
+                        <LogIn className="w-8 h-8 text-[#D4AF37]" />
                     </div>
-                    <h2 className="mt-6 text-2xl sm:text-3xl font-extrabold text-gray-900">Entre na sua conta</h2>
-                    <p className="mt-2 text-sm text-gray-600">
-                        Ou{' '}
-                        <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
-                            crie uma nova conta
-                        </Link>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-widest uppercase">Bem-vindo</h2>
+                    <p className="mt-2 text-xs text-[#D4AF37] uppercase tracking-wide">
+                        Acesse sua conta premium
                     </p>
                 </div>
+
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    {error && <div className="text-red-500 text-sm text-center">{error}</div>}
-                    <div className="rounded-md shadow-sm -space-y-px">
+                    {error && (
+                        <div className="bg-red-900/20 border border-red-500/30 text-red-500 text-xs rounded-lg p-3 text-center uppercase tracking-wide font-bold">
+                            {error}
+                        </div>
+                    )}
+
+                    <div className="space-y-4">
                         <div>
-                            <label htmlFor="email-address" className="sr-only">Endereço de Email</label>
+                            <label htmlFor="email" className="block text-xs font-bold text-[#D4AF37] uppercase tracking-wider mb-2">
+                                Email
+                            </label>
                             <input
-                                id="email-address"
+                                id="email"
                                 name="email"
                                 type="email"
                                 autoComplete="email"
                                 required
-                                className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 text-base sm:text-sm"
-                                placeholder="Endereço de Email"
+                                className="appearance-none block w-full px-4 py-3.5 bg-[#0A0A0A] border border-[#2A2A2A] placeholder-gray-600 text-white rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all sm:text-sm"
+                                placeholder="usuario@exemplo.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                         <div>
-                            <label htmlFor="password" className="sr-only">Senha</label>
+                            <label htmlFor="password" className="block text-xs font-bold text-[#D4AF37] uppercase tracking-wider mb-2">
+                                Senha
+                            </label>
                             <input
                                 id="password"
                                 name="password"
                                 type="password"
                                 autoComplete="current-password"
                                 required
-                                className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 text-base sm:text-sm"
-                                placeholder="Senha"
+                                className="appearance-none block w-full px-4 py-3.5 bg-[#0A0A0A] border border-[#2A2A2A] placeholder-gray-600 text-white rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all sm:text-sm"
+                                placeholder="••••••••"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
@@ -74,10 +83,19 @@ const Login: React.FC = () => {
                     <div>
                         <button
                             type="submit"
-                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 active:bg-blue-800"
+                            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-lg text-black bg-[#D4AF37] hover:bg-[#B5952F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#121212] focus:ring-[#D4AF37] transition-all duration-200 shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] uppercase tracking-widest"
                         >
                             Entrar
                         </button>
+                    </div>
+
+                    <div className="text-center mt-6">
+                        <p className="text-sm text-gray-400">
+                            Não é membro?{' '}
+                            <Link to="/register" className="font-bold text-[#D4AF37] hover:underline transition-colors uppercase text-xs tracking-wider">
+                                Cadastre-se
+                            </Link>
+                        </p>
                     </div>
                 </form>
             </div>

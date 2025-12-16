@@ -7,13 +7,12 @@ const Register: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('USER'); // Default role
+    const [role, setRole] = useState('USER');
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            // Backend expects: { name, email, password, role }
             await api.post('/auth/register', {
                 name,
                 email,
@@ -25,7 +24,6 @@ const Register: React.FC = () => {
         } catch (err: any) {
             console.error(err);
             if (err.response?.data?.issues) {
-                // Format Zod issues if backend returns them
                 const messages = err.response.data.issues.map((issue: any) => `${issue.path.join('.')}: ${issue.message}`).join('\n');
                 alert(`Erro de validação:\n${messages}`);
             } else if (err.response?.data?.message) {
@@ -37,71 +35,73 @@ const Register: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8">
-            <div className="w-full max-w-sm sm:max-w-md p-6 sm:p-8 space-y-8 bg-white rounded-xl shadow-lg">
+        <div className="flex items-center justify-center min-h-screen bg-black px-4 sm:px-6 lg:px-8">
+            <div className="w-full max-w-sm sm:max-w-md p-6 sm:p-8 space-y-8 bg-[#121212] rounded-xl border border-[#2A2A2A] shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#D4AF37] to-[#8C7323]"></div>
+
                 <div className="text-center">
-                    <div className="flex justify-center mx-auto bg-green-100 p-3 rounded-full w-fit">
-                        <UserPlus className="w-8 h-8 text-green-600" />
+                    <div className="flex justify-center mx-auto bg-[#D4AF37]/10 p-4 rounded-full w-fit mb-4 border border-[#D4AF37]/20">
+                        <UserPlus className="w-8 h-8 text-[#D4AF37]" />
                     </div>
-                    <h2 className="mt-6 text-2xl sm:text-3xl font-extrabold text-gray-900">Crie sua conta</h2>
-                    <p className="mt-2 text-sm text-gray-600">
-                        Já tem uma conta?{' '}
-                        <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
-                            Entrar
-                        </Link>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-widest uppercase">Junte-se a Nós</h2>
+                    <p className="mt-2 text-xs text-[#D4AF37] uppercase tracking-wide">
+                        Crie sua conta exclusiva
                     </p>
                 </div>
+
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="rounded-md shadow-sm space-y-4">
+                    <div className="space-y-4">
                         <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nome Completo</label>
+                            <label htmlFor="name" className="block text-xs font-bold text-[#D4AF37] uppercase tracking-wider mb-2">Nome Completo</label>
                             <input
                                 id="name"
                                 name="name"
                                 type="text"
                                 required
-                                className="mt-1 appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                placeholder="Nome Completo"
+                                className="appearance-none block w-full px-4 py-3.5 bg-[#0A0A0A] border border-[#2A2A2A] placeholder-gray-600 text-white rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all sm:text-sm"
+                                placeholder="Seu nome"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
                         </div>
                         <div>
-                            <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">Endereço de Email</label>
+                            <label htmlFor="email" className="block text-xs font-bold text-[#D4AF37] uppercase tracking-wider mb-2">Email</label>
                             <input
-                                id="email-address"
+                                id="email"
                                 name="email"
                                 type="email"
                                 required
-                                className="mt-1 appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                placeholder="Endereço de Email"
+                                className="appearance-none block w-full px-4 py-3.5 bg-[#0A0A0A] border border-[#2A2A2A] placeholder-gray-600 text-white rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all sm:text-sm"
+                                placeholder="seu@email.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                         <div>
-                            <label htmlFor="role" className="block text-sm font-medium text-gray-700">Tipo de Conta</label>
-                            <select
-                                id="role"
-                                name="role"
-                                value={role}
-                                onChange={(e) => setRole(e.target.value)}
-                                className="mt-1 block w-full pl-3 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md"
-                            >
-                                <option value="USER">Participante (Padrão)</option>
-                                <option value="ORGANIZER">Organizador</option>
-                            </select>
+                            <label htmlFor="role" className="block text-xs font-bold text-[#D4AF37] uppercase tracking-wider mb-2">Tipo de Conta</label>
+                            <div className="relative">
+                                <select
+                                    id="role"
+                                    name="role"
+                                    value={role}
+                                    onChange={(e) => setRole(e.target.value)}
+                                    className="appearance-none block w-full px-4 py-3.5 bg-[#0A0A0A] border border-[#2A2A2A] text-white rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all sm:text-sm"
+                                >
+                                    <option value="USER">Participante</option>
+                                    <option value="ORGANIZER">Organizador</option>
+                                </select>
+                            </div>
                         </div>
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Senha (mín. 6 caracteres)</label>
+                            <label htmlFor="password" className="block text-xs font-bold text-[#D4AF37] uppercase tracking-wider mb-2">Senha</label>
                             <input
                                 id="password"
                                 name="password"
                                 type="password"
                                 required
                                 minLength={6}
-                                className="mt-1 appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                placeholder="Senha"
+                                className="appearance-none block w-full px-4 py-3.5 bg-[#0A0A0A] border border-[#2A2A2A] placeholder-gray-600 text-white rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all sm:text-sm"
+                                placeholder="Mínimo 6 caracteres"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
@@ -111,10 +111,19 @@ const Register: React.FC = () => {
                     <div>
                         <button
                             type="submit"
-                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 active:bg-green-800"
+                            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-lg text-black bg-[#D4AF37] hover:bg-[#B5952F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#121212] focus:ring-[#D4AF37] transition-all duration-200 shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] uppercase tracking-widest"
                         >
-                            Cadastrar
+                            Criar Conta
                         </button>
+                    </div>
+
+                    <div className="text-center mt-6">
+                        <p className="text-sm text-gray-400">
+                            Já é membro?{' '}
+                            <Link to="/login" className="font-bold text-[#D4AF37] hover:underline transition-colors uppercase text-xs tracking-wider">
+                                Entrar na conta
+                            </Link>
+                        </p>
                     </div>
                 </form>
             </div>
